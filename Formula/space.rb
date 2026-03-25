@@ -1,18 +1,18 @@
 class Space < Formula
   desc "Workspace manager for multi-repo git worktrees"
   homepage "https://github.com/daderoode/space"
-  version "0.4.0"
+  version "0.4.1"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/space/releases/download/v0.4.0/space-v0.4.0-aarch64-apple-darwin.tar.gz"
-      sha256 "9199727efcaf5f19410ad6745e002b82c003f697886431b0f3d183ddf3c332b1"
+      url "https://github.com/daderoode/space/releases/download/v0.4.1/space-v0.4.1-aarch64-apple-darwin.tar.gz"
+      sha256 "404dcb3588a4104f5680fd9d34446513329b354c094043ce14f5e93c64001648"
     end
 
     on_intel do
-      url "https://github.com/daderoode/space/releases/download/v0.4.0/space-v0.4.0-x86_64-apple-darwin.tar.gz"
-      sha256 "188f4f01f4b5a4f29f94bb0d8ea6c75971dfe5f80c56bdcf7f572984ca025848"
+      url "https://github.com/daderoode/space/releases/download/v0.4.1/space-v0.4.1-x86_64-apple-darwin.tar.gz"
+      sha256 "be5ebaa0149b052300aa63cadaf9a910f84f986950f61d00b8b7d769ffb16863"
     end
   end
 
@@ -26,21 +26,21 @@ class Space < Formula
       and TUI commands (space, space config, space create, etc.) render correctly:
 
         space() {
-          case "${1:-}" in
-            ls|list|status|st|repos|completions|--version|--help|-h|-V)
-              command space "$@"
-              ;;
-            *)
-              local cdfile="${TMPDIR:-/tmp}/.space_cd_$$"
-              __SPACE_CD_FILE__="$cdfile" command space "$@"
-              local ret=$?
-              if [[ -s "$cdfile" ]]; then
-                cd -- "$(<"$cdfile")"
-              fi
-              rm -f "$cdfile" 2>/dev/null
-              return $ret
-              ;;
-          esac
+case "${1:-}" in
+  ls|list|status|st|repos|completions|--version|--help|-h|-V)
+    command space "$@"
+    ;;
+  *)
+    local cdfile="${TMPDIR:-/tmp}/.space_cd_$$"
+    __SPACE_CD_FILE__="$cdfile" command space "$@"
+    local ret=$?
+    if [[ -s "$cdfile" ]]; then
+      cd -- "$(<"$cdfile")"
+    fi
+    rm -f "$cdfile" 2>/dev/null
+    return $ret
+    ;;
+esac
         }
 
       Then generate completions:
@@ -52,6 +52,6 @@ class Space < Formula
   end
 
   test do
-    system "#{bin}/space", "--version"
+    system "\#{bin}/space", "--version"
   end
 end
