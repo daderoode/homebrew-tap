@@ -1,18 +1,18 @@
 class Space < Formula
   desc "Workspace manager for multi-repo git worktrees"
   homepage "https://github.com/daderoode/space"
-  version "0.6.0"
+  version "0.6.1"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/space/releases/download/v0.6.0/space-v0.6.0-aarch64-apple-darwin.tar.gz"
-      sha256 "35e903c11ed7911ed033ab6105767a75f2440f552e5002ca19099f4005dc098a"
+      url "https://github.com/daderoode/space/releases/download/v0.6.1/space-v0.6.1-aarch64-apple-darwin.tar.gz"
+      sha256 "94b23bb13a6d306bca610cf8bd2817addb8fa781889ce0c38ff10c110b7dfd29"
     end
 
     on_intel do
-      url "https://github.com/daderoode/space/releases/download/v0.6.0/space-v0.6.0-x86_64-apple-darwin.tar.gz"
-      sha256 "9b641c0217ebc6e55042969323b101755d4138fac3c8226c464bef98e2db5634"
+      url "https://github.com/daderoode/space/releases/download/v0.6.1/space-v0.6.1-x86_64-apple-darwin.tar.gz"
+      sha256 "d064c53c50283faa918857099c7f0b3bec212aa364e4cec288f825153cffe442"
     end
   end
 
