@@ -1,53 +1,37 @@
 class Space < Formula
   desc "Workspace manager for multi-repo git worktrees"
   homepage "https://github.com/daderoode/space"
-  version "0.6.2"
+  version "0.7.0"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/space/releases/download/v0.6.2/space-v0.6.2-aarch64-apple-darwin.tar.gz"
-      sha256 "44c047cad09d42fec350ef71fb228898ae1e2161167c62ce33d05348b7ca5d0b"
+      url "https://github.com/daderoode/space/releases/download/v0.7.0/space-v0.7.0-aarch64-apple-darwin.tar.gz"
+      sha256 "251a7eadd233fb1cfc433cd47bd1b9f6a8020f060d5349a8e2020c0faaaf9f28"
     end
 
     on_intel do
-      url "https://github.com/daderoode/space/releases/download/v0.6.2/space-v0.6.2-x86_64-apple-darwin.tar.gz"
-      sha256 "1381b3da3bc731f6a2c849bf6b11feeb475bdffcfe225becf3486fff5061c10a"
+      url "https://github.com/daderoode/space/releases/download/v0.7.0/space-v0.7.0-x86_64-apple-darwin.tar.gz"
+      sha256 "b4d0948c6e9d45b46eb36f21527e94cfb7f0d57eec8b741ef608b9126e076afe"
     end
   end
 
   def install
     bin.install "space"
+    output = Utils.safe_popen_read(bin/"space", "completions", "zsh")
+    odie "space completions zsh produced no output" if output.strip.empty?
+    (zsh_completion/"_space").write output
   end
 
   def caveats
     <<~EOS
-      Add the shell wrapper to your ~/.zshrc so `space go` can change directories
-      and TUI commands (space, space config, space create, etc.) render correctly:
+      Add to your ~/.zshrc to enable `space go` directory changing and TUI rendering:
 
-        space() {
-case "${1:-}" in
-  ls|list|status|st|repos|completions|--version|--help|-h|-V)
-    command space "$@"
-    ;;
-  *)
-    local cdfile="${TMPDIR:-/tmp}/.space_cd_$$"
-    __SPACE_CD_FILE__="$cdfile" command space "$@"
-    local ret=$?
-    if [[ -s "$cdfile" ]]; then
-      cd -- "$(<"$cdfile")"
-    fi
-    rm -f "$cdfile" 2>/dev/null
-    return $ret
-    ;;
-esac
-        }
+        eval "$(space init zsh)"
 
-      Then generate completions:
-
-        space completions zsh > ~/.zfunc/_space
-
-      NOTE: If you have an older wrapper in your ~/.zshrc, replace it with the above.
+      Completions are installed to Homebrew's zsh site-functions directory.
+      If you use Homebrew's zsh or have configured $fpath to include it,
+      tab completion works without any extra steps.
     EOS
   end
 
