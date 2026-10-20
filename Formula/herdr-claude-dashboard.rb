@@ -3,17 +3,17 @@
 class HerdrClaudeDashboard < Formula
   desc "Workstream dashboard for Claude Code sessions, as a herdr plugin"
   homepage "https://github.com/daderoode/herdr-claude-dashboard"
-  version "0.1.1"
+  version "0.1.2"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/herdr-claude-dashboard-v0.1.1/hcd-v0.1.1-aarch64-apple-darwin.tar.gz"
-      sha256 "9d352fe007ec13c26ca0a1dcc49c06906c374e076feadfd233044316a35c5236"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/herdr-claude-dashboard-v0.1.2/hcd-v0.1.2-aarch64-apple-darwin.tar.gz"
+      sha256 "a1563af96eda7c399a19e7a51c7d18bf9c6b87d253c004fa019db76388c2c0ed"
     end
 
     on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/herdr-claude-dashboard-v0.1.1/hcd-v0.1.1-x86_64-apple-darwin.tar.gz"
-      sha256 "975588c75919a02e0b1deffcc13371e86e70d10eda510001aaf8641d6d7bae13"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/herdr-claude-dashboard-v0.1.2/hcd-v0.1.2-x86_64-apple-darwin.tar.gz"
+      sha256 "974cdc86c5652f6912e970dfad2829a611546c580d6eb7ec06d38c8cd8cbdf1a"
     end
   end
 
