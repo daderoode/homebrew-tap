@@ -3,25 +3,26 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  version "0.1.2"
+  version "0.1.3"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.2/tower-v0.1.2-aarch64-apple-darwin.tar.gz"
-      sha256 "00e9aa5ec5bd15b3f96caf68054f011798fe33cf4f3f4b879c1288f85263f8cd"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.3/tower-v0.1.3-aarch64-apple-darwin.tar.gz"
+      sha256 "32794f66ab33e105e63cb65e0ae563290d97ee4d3018672f04fc36f112485fe0"
     end
 
     on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.2/tower-v0.1.2-x86_64-apple-darwin.tar.gz"
-      sha256 "acf38e05f92eeaec56af4aa86969178f163f769fa89f044290320f87c81d855c"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.3/tower-v0.1.3-x86_64-apple-darwin.tar.gz"
+      sha256 "296d6ca8467d3192eb178f2957acd3aa4448e1fb360d8c54f11733366e187a54"
     end
   end
 
   def install
     bin.install "tower"
-    # The repo's dev manifest builds with cargo and runs ./target/release/tower. The
-    # installed manifest drops the build step and runs the installed binary by absolute path.
-    pkgshare.install "herdr-plugin.toml", "scripts"
+    # The repo's dev manifest builds with cargo and runs ./target/release/tower, for its pane
+    # and its actions. The installed manifest drops the build step and runs the installed
+    # binary by absolute path.
+    pkgshare.install "herdr-plugin.toml"
     inreplace pkgshare/"herdr-plugin.toml" do |s|
       s.gsub!(/^(?:#.*\n)*\[\[build\]\]\n(?:[^\[\n].*\n)*\n?/, "")
       s.gsub! "./target/release/tower", "#{opt_bin}/tower"
@@ -34,9 +35,8 @@ class ControlTower < Formula
   # the plugin files in place.
   def post_install
     dir = var/"control-tower"
-    (dir/"scripts").mkpath
+    dir.mkpath
     cp pkgshare/"herdr-plugin.toml", dir/"herdr-plugin.toml"
-    cp pkgshare/"scripts/open-pane.sh", dir/"scripts/open-pane.sh"
   end
 
   service do
@@ -65,6 +65,6 @@ class ControlTower < Formula
     manifest = (pkgshare/"herdr-plugin.toml").read
     assert_match "#{opt_bin}/tower", manifest
     refute_match "[[build]]", manifest
-    assert_path_exists pkgshare/"scripts/open-pane.sh"
+    refute_match "./target/release", manifest
   end
 end
