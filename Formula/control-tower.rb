@@ -3,17 +3,17 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  version "0.1.3"
+  version "0.1.4"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.3/tower-v0.1.3-aarch64-apple-darwin.tar.gz"
-      sha256 "32794f66ab33e105e63cb65e0ae563290d97ee4d3018672f04fc36f112485fe0"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.4/tower-v0.1.4-aarch64-apple-darwin.tar.gz"
+      sha256 "748bff385f92404419282c1fbd8c06321f75402d6270b6d1d156e46e4140c5f7"
     end
 
     on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.3/tower-v0.1.3-x86_64-apple-darwin.tar.gz"
-      sha256 "296d6ca8467d3192eb178f2957acd3aa4448e1fb360d8c54f11733366e187a54"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.4/tower-v0.1.4-x86_64-apple-darwin.tar.gz"
+      sha256 "1312924c2a571a6af48abf8037b8e08265033eb04c020f4af1aa2625e7ca0492"
     end
   end
 
@@ -27,6 +27,10 @@ class ControlTower < Formula
       s.gsub!(/^(?:#.*\n)*\[\[build\]\]\n(?:[^\[\n].*\n)*\n?/, "")
       s.gsub! "./target/release/tower", "#{opt_bin}/tower"
     end
+    # The lead skill's Claude Code marketplace. Claude records a local marketplace by the
+    # path it was added with and loads its plugin in place from there, so one added through
+    # opt_pkgshare follows every upgrade with no copy and no reinstall.
+    pkgshare.install "claude"
   end
 
   # herdr stores a plugin's resolved path, and pkgshare resolves into the versioned Cellar
@@ -57,6 +61,13 @@ class ControlTower < Formula
       brew one instead:
         herdr plugin unlink control-tower
         herdr plugin link #{var}/control-tower
+
+      The watch registers the lead skill's Claude Code marketplace at
+      #{opt_pkgshare}/claude when Claude Code has no control-tower marketplace
+      (or has the GitHub one). It leaves one added from a source checkout alone;
+      to use the brew one instead:
+        claude plugin marketplace add #{opt_pkgshare}/claude
+        claude plugin install control-tower@control-tower
     EOS
   end
 
@@ -66,5 +77,11 @@ class ControlTower < Formula
     assert_match "#{opt_bin}/tower", manifest
     refute_match "[[build]]", manifest
     refute_match "./target/release", manifest
+    marketplace = JSON.parse((pkgshare/"claude/.claude-plugin/marketplace.json").read)
+    refute_empty marketplace["plugins"]
+    marketplace["plugins"].each do |plugin|
+      assert_path_exists pkgshare/"claude"/plugin["source"]/".claude-plugin/plugin.json"
+    end
+    assert_path_exists pkgshare/"claude/claude-plugin/skills/lead/SKILL.md"
   end
 end
