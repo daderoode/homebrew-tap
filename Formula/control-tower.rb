@@ -3,17 +3,17 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  version "0.1.8"
+  version "0.1.9"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.8/tower-v0.1.8-aarch64-apple-darwin.tar.gz"
-      sha256 "468bae7f7c4ba0f3082021b0afcd56d739559f4f9fd26abcbca73787d880475e"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.9/tower-v0.1.9-aarch64-apple-darwin.tar.gz"
+      sha256 "8549f53e6ff9d5ba6c3d64c64bb0f6da48f52d5b5014887417ebe8c583da60d4"
     end
 
     on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.8/tower-v0.1.8-x86_64-apple-darwin.tar.gz"
-      sha256 "78c4b49c52f37eff8cfa3378c2a787e317d4092709e57090b03506bdb44bdda1"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.9/tower-v0.1.9-x86_64-apple-darwin.tar.gz"
+      sha256 "2a32cefdfe2836e8710c496d84d5b54b8f163867437883a363e5a664393a3d19"
     end
   end
 
@@ -83,5 +83,6 @@ class ControlTower < Formula
       assert_path_exists pkgshare/"claude"/plugin["source"]/".claude-plugin/plugin.json"
     end
     assert_path_exists pkgshare/"claude/claude-plugin/skills/lead/SKILL.md"
+    assert_match "tower lead hook", (pkgshare/"claude/claude-plugin/hooks/hooks.json").read
   end
 end
