@@ -3,17 +3,17 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  version "0.1.5"
+  version "0.1.6"
 
   on_macos do
     on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.5/tower-v0.1.5-aarch64-apple-darwin.tar.gz"
-      sha256 "c390861a25d1bb2b3f941de9de0138f69e8563d09da006814bb9fc9eb5c03d7c"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.6/tower-v0.1.6-aarch64-apple-darwin.tar.gz"
+      sha256 "c545db5fdf20680d2e4087867c368c50189c1feb07896cb93859a7234a7ccda8"
     end
 
     on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.5/tower-v0.1.5-x86_64-apple-darwin.tar.gz"
-      sha256 "6682880fbb41cef1d2920fe356293d8cc16b0cbf7b5b0b39fbe541a639eadff4"
+      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.1.6/tower-v0.1.6-x86_64-apple-darwin.tar.gz"
+      sha256 "194f52aad01433e388ee6db3e03f99a1cb2dce23033ceb7a1648e817423148e9"
     end
   end
 
