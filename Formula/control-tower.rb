@@ -3,19 +3,15 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  version "0.3.1"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.4.0/tower-v0.4.0-aarch64-apple-darwin.tar.gz"
+  version "0.4.0"
+  sha256 "b81583ac3187d753174388d6115f93617647af735878e885609fe35f85a45382"
 
-  on_macos do
-    on_arm do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.3.1/tower-v0.3.1-aarch64-apple-darwin.tar.gz"
-      sha256 "5a05462552a7fed75884dc444940169ad80a6ee4c61a731c6e9393983a034f69"
-    end
-
-    on_intel do
-      url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.3.1/tower-v0.3.1-x86_64-apple-darwin.tar.gz"
-      sha256 "5121aa668bde9aa97e9148c2c5386a03377cf51ec784e113f4a80283f9febe2c"
-    end
-  end
+  # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
+  # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
+  # release with an Intel build.
+  depends_on arch: :arm64
+  depends_on :macos
 
   def install
     bin.install "tower"
