@@ -3,9 +3,9 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
   homepage "https://github.com/daderoode/control-tower"
-  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.5.2/tower-v0.5.2-aarch64-apple-darwin.tar.gz"
-  version "0.5.2"
-  sha256 "20de37c1a82433639adc8b60057031c47db694453e12c6d1ed00a37e05ea5f29"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.5.3/tower-v0.5.3-aarch64-apple-darwin.tar.gz"
+  version "0.5.3"
+  sha256 "caa961ae52496605f265c2302e4d9172f298cd79dc7e7f9ff23c1b6feb4d4510"
 
   # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
   # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
