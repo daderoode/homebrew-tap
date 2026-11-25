@@ -1,11 +1,11 @@
 # Rendered by packaging/render-formula.sh in daderoode/control-tower on each release.
 # Edit the template there, not the copy in daderoode/homebrew-tap.
 class ControlTower < Formula
-  desc "Taskboard for a team of Claude Code agents, as a herdr plugin"
+  desc "Taskboard for a team of Claude Code agents in the terminal, Rex"
   homepage "https://github.com/daderoode/control-tower"
-  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.5.3/tower-v0.5.3-aarch64-apple-darwin.tar.gz"
-  version "0.5.3"
-  sha256 "caa961ae52496605f265c2302e4d9172f298cd79dc7e7f9ff23c1b6feb4d4510"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.6.0/tower-v0.6.0-aarch64-apple-darwin.tar.gz"
+  version "0.6.0"
+  sha256 "91f0e0c600608b6b844c94612f5fa426499b46fd128269dd5ab326c215a74138"
 
   # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
   # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
@@ -15,28 +15,10 @@ class ControlTower < Formula
 
   def install
     bin.install "tower"
-    # The repo's dev manifest builds with cargo and runs ./target/release/tower, for its pane
-    # and its actions. The installed manifest drops the build step and runs the installed
-    # binary by absolute path.
-    pkgshare.install "herdr-plugin.toml"
-    inreplace pkgshare/"herdr-plugin.toml" do |s|
-      s.gsub!(/^(?:#.*\n)*\[\[build\]\]\n(?:[^\[\n].*\n)*\n?/, "")
-      s.gsub! "./target/release/tower", "#{opt_bin}/tower"
-    end
     # The lead skill's Claude Code marketplace. Claude records a local marketplace by the
     # path it was added with and loads its plugin in place from there, so one added through
     # opt_pkgshare follows every upgrade with no copy and no reinstall.
     pkgshare.install "claude"
-  end
-
-  # herdr stores a plugin's resolved path, and pkgshare resolves into the versioned Cellar
-  # that `brew upgrade` deletes. var is not versioned, so herdr links there once (tower
-  # links it itself when herdr has no control-tower) and every install or upgrade refreshes
-  # the plugin files in place.
-  def post_install
-    dir = var/"control-tower"
-    dir.mkpath
-    cp pkgshare/"herdr-plugin.toml", dir/"herdr-plugin.toml"
   end
 
   service do
@@ -49,14 +31,25 @@ class ControlTower < Formula
 
   def caveats
     <<~EOS
+      control-tower needs Rex, the terminal its team runs in. The watch finds rex on
+      Homebrew's PATH; Rex keeps it in REX_BIN_DIR, which it sets in its own tabs, so
+      from a Rex tab link it into Homebrew's bin:
+        ln -s "$REX_BIN_DIR/rex" "#{HOMEBREW_PREFIX}/bin/rex"
+
       Start the stuck-worker watch as a background service (it starts at login):
         brew services start control-tower
 
-      tower links its herdr plugin from #{var}/control-tower when herdr has no
-      control-tower plugin yet. It leaves a linked source checkout alone; to use the
-      brew one instead:
+      herdr is no longer supported: a team in herdr is not seen, and tower space and
+      tower popup are gone. If an older control-tower linked its herdr plugin, remove
+      what it left behind:
         herdr plugin unlink control-tower
-        herdr plugin link #{var}/control-tower
+        rm -r #{var}/control-tower
+      delete any key binding for the control-tower actions (space, popup) in herdr's
+      config, ~/.config/herdr/config.toml, and, if you used tower space, the file it
+      kept beside the board (harmless, read by nothing now):
+        rm -f ~/.local/state/control-tower/board.space-from
+      For a board TOWER_DB names, it is that file's name with .space-from in place
+      of .db.
 
       The watch registers the lead skill's Claude Code marketplace at
       #{opt_pkgshare}/claude when Claude Code has no control-tower marketplace
@@ -69,10 +62,6 @@ class ControlTower < Formula
 
   test do
     assert_match version.to_s, shell_output("#{bin}/tower --version")
-    manifest = (pkgshare/"herdr-plugin.toml").read
-    assert_match "#{opt_bin}/tower", manifest
-    refute_match "[[build]]", manifest
-    refute_match "./target/release", manifest
     marketplace = JSON.parse((pkgshare/"claude/.claude-plugin/marketplace.json").read)
     refute_empty marketplace["plugins"]
     marketplace["plugins"].each do |plugin|
