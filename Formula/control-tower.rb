@@ -3,9 +3,9 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents in the terminal, Rex"
   homepage "https://github.com/daderoode/control-tower"
-  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.6.1/tower-v0.6.1-aarch64-apple-darwin.tar.gz"
-  version "0.6.1"
-  sha256 "f7d3c85121790d2082399ca1d9dc6ec4e13fac1147b259038d296fec234214f3"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.6.2/tower-v0.6.2-aarch64-apple-darwin.tar.gz"
+  version "0.6.2"
+  sha256 "c344e51f4781e13fa430a3f1172af39b0546f9fa954c3a46d18737fc231d649a"
 
   # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
   # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
@@ -19,6 +19,10 @@ class ControlTower < Formula
     # path it was added with and loads its plugin in place from there, so one added through
     # opt_pkgshare follows every upgrade with no copy and no reinstall.
     pkgshare.install "claude"
+    # The Rex actions for the dashboard's keys, with this prefix written in: Rex runs their
+    # commands with its own PATH, which has no Homebrew in it.
+    pkgshare.install "rex"
+    inreplace pkgshare/"rex/control-tower.lua", "@HOMEBREW_PREFIX@", HOMEBREW_PREFIX.to_s
   end
 
   service do
@@ -39,9 +43,16 @@ class ControlTower < Formula
       Start the stuck-worker watch as a background service (it starts at login):
         brew services start control-tower
 
-      herdr is no longer supported: a team in herdr is not seen, and tower space and
-      tower popup are gone. If an older control-tower linked its herdr plugin, remove
-      what it left behind:
+      Keys for the dashboard in Rex: its own tab (pressed again there, back to where
+      you were) and a popup over your tab. Add to ~/.config/rex/init.lua, with the
+      keys you want, then run rex config reload:
+        dofile("#{opt_pkgshare}/rex/control-tower.lua")
+        rex.bind("<key>", "tower_space")
+        rex.bind("<key>", "tower_popup")
+
+      herdr is no longer supported: a team in herdr is not seen, and its plugin is
+      gone (tower space and tower popup now serve the Rex keys above). If an older
+      control-tower linked its herdr plugin, remove what it left behind:
         herdr plugin unlink control-tower
         rm -r #{var}/control-tower
       delete any key binding for the control-tower actions (space, popup) in herdr's
@@ -69,5 +80,8 @@ class ControlTower < Formula
     end
     assert_path_exists pkgshare/"claude/claude-plugin/skills/lead/SKILL.md"
     assert_match "tower lead hook", (pkgshare/"claude/claude-plugin/hooks/hooks.json").read
+    snippet = (pkgshare/"rex/control-tower.lua").read
+    assert_match "local prefix = \"#{HOMEBREW_PREFIX}\"", snippet
+    refute_match "@HOMEBREW_PREFIX@", snippet
   end
 end
