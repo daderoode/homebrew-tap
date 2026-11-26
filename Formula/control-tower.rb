@@ -1,11 +1,11 @@
 # Rendered by packaging/render-formula.sh in daderoode/control-tower on each release.
 # Edit the template there, not the copy in daderoode/homebrew-tap.
 class ControlTower < Formula
-  desc "Taskboard for a team of Claude Code agents in the terminal, Rex"
+  desc "Taskboard for a team of Claude Code agents"
   homepage "https://github.com/daderoode/control-tower"
-  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.7.0/tower-v0.7.0-aarch64-apple-darwin.tar.gz"
-  version "0.7.0"
-  sha256 "9bd880238e2c9a150a88e2da2d066e02187cab87201cf6c6da95913571192fa4"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.8.0/tower-v0.8.0-aarch64-apple-darwin.tar.gz"
+  version "0.8.0"
+  sha256 "70a909c8ef955adc09856e5ca3f5de2ee17b48cdec6a9fadb9ce2aff08309266"
 
   # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
   # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
@@ -35,10 +35,15 @@ class ControlTower < Formula
 
   def caveats
     <<~EOS
-      control-tower needs Rex, the terminal its team runs in. The watch finds rex on
-      Homebrew's PATH; Rex keeps it in REX_BIN_DIR, which it sets in its own tabs, so
-      from a Rex tab link it into Homebrew's bin:
+      control-tower works on its own, in any terminal. Rex is optional and adds the
+      text of the prompt a worker waits at in its owner item, the dashboard's n and
+      its two keys (tower space, tower popup), and starting workers as visible tabs.
+      To use Rex: the watch finds rex on Homebrew's PATH; Rex keeps it in
+      REX_BIN_DIR, which it sets in its own tabs, so from a Rex tab link it into
+      Homebrew's bin:
         ln -s "$REX_BIN_DIR/rex" "#{HOMEBREW_PREFIX}/bin/rex"
+      Once rex is linked, the watch reads only the workers in Rex while Rex runs,
+      and reads them from Claude Code's session list while Rex is not running.
 
       Start the stuck-worker watch as a background service (it starts at login):
         brew services start control-tower
