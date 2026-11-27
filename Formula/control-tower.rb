@@ -3,9 +3,9 @@
 class ControlTower < Formula
   desc "Taskboard for a team of Claude Code agents"
   homepage "https://github.com/daderoode/control-tower"
-  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.8.0/tower-v0.8.0-aarch64-apple-darwin.tar.gz"
-  version "0.8.0"
-  sha256 "70a909c8ef955adc09856e5ca3f5de2ee17b48cdec6a9fadb9ce2aff08309266"
+  url "https://github.com/daderoode/homebrew-tap/releases/download/control-tower-v0.9.0/tower-v0.9.0-aarch64-apple-darwin.tar.gz"
+  version "0.9.0"
+  sha256 "71e3fdf9b210761795d89cfcb3891e0f6d3ea592857c9873cd9c0876a5888d2a"
 
   # Built for macOS on Apple silicon only: Homebrew refuses it anywhere else, with
   # its own message, rather than install nothing. An Intel Mac keeps v0.3.1, the last
@@ -35,9 +35,14 @@ class ControlTower < Formula
 
   def caveats
     <<~EOS
-      control-tower works on its own, in any terminal. Rex is optional and adds the
-      text of the prompt a worker waits at in its owner item, the dashboard's n and
-      its two keys (tower space, tower popup), and starting workers as visible tabs.
+      control-tower works on its own, in any terminal. A lead that runs in Rex opens
+      its workers in Rex. Any other lead opens them in Ghostty: for those, install
+      Ghostty, and the first time a worker starts, let the app the lead runs in
+      control Ghostty when macOS asks (System Settings, Privacy & Security,
+      Automation).
+
+      Rex is optional and adds the text of the prompt a worker waits at in its owner
+      item, and the dashboard's n and its two keys (tower space, tower popup).
       To use Rex: the watch finds rex on Homebrew's PATH; Rex keeps it in
       REX_BIN_DIR, which it sets in its own tabs, so from a Rex tab link it into
       Homebrew's bin:
